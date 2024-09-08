@@ -23,6 +23,12 @@ public class User {
         this.Userid = Userid;
         this.Username = Username;
     }*/
+    public User() {}
+
+    public User(String username,  String userEmail) {
+        this.Username = username;
+        this.Useremail = userEmail;
+    }
 
     public int getUserid() {
         return Userid;

@@ -27,6 +27,16 @@ public class Rating {
 
     private int rating;
 
+
+    public Rating() {}
+
+    public Rating(User user, Item item, int rating) {
+        this.user = user;
+        this.item = item;
+        this.rating = rating;
+    }
+
+
     public int getId() {
         return id;
     }

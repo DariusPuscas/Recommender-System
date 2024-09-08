@@ -16,12 +16,21 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int itemId;
     private String itemTitle;
+    private String name;
     //private String itemDescription;
 
  /*   public Item(int itemId, String itemTitle) {
         this.itemId = itemId;
         this.itemTitle = itemTitle;
     }*/
+    public Item() {}
+
+    public Item(String name, String itemTitle) {
+        this.name = name;
+        //this.itemId = itemId;
+        this.itemTitle = itemTitle;
+    }
+
     public int getItemId() {
         return itemId;
     }

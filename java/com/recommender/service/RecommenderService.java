@@ -2,10 +2,18 @@ package com.recommender.service;
 
 import com.recommender.model.Rating;
 import com.recommender.repository.RatingRepository;
+import com.recommender.model.*;
+import org.hibernate.service.spi.InjectService;
 
 import java.util.*;
 
 public class RecommenderService {
+
+    private RatingRepository ratingRepository;
+    public RecommenderService(RatingRepository ratingRepository) {
+        this.ratingRepository = ratingRepository;
+    }
+
     // cos similarity of 2 users ratings
     public double cosineSimilarity(int[] ratingsUser1, int[] ratingsUser2) {
         double dotProduct = 0.0;
@@ -20,37 +28,27 @@ public class RecommenderService {
 
         return dotProduct / (Math.sqrt(normUser1) * Math.sqrt(normUser2));
     }
-    public List<Integer> recommendItems(int userId, List<Rating> ratings) {
-        Map<Integer, List<Rating>> userRatingsMap = new HashMap<>();
+    public List<Item> recommendItems(User targetUser) {
 
-        // Group ratings by user
-        for (Rating rating : ratings) {
-            userRatingsMap.computeIfAbsent(rating.getUser().getUserid(), k -> new ArrayList<>()).add(rating);
-        }
+        // 1. Obține evaluările pentru utilizatorul țintă
+        List<Rating> targetUserRatings = ratingRepository.findByUser(targetUser);
 
-        int[] targetUserRatings = extractRatingsForUser(userId, ratings);
-        List<Integer> recommendedItems = new ArrayList<>();
+        // 2. Găsește utilizatori similari
+        List<User> similarUsers = ratingRepository.findSimilarUsers(targetUser);
 
-        double maxSimilarity = -1;
-        int mostSimilarUser = -1;
+        List<Item> recommendedItems = new ArrayList<>();
 
-        // search for the most similar user
-        for (Map.Entry<Integer, List<Rating>> entry : userRatingsMap.entrySet()) {
-            if (entry.getKey() != userId) {
-                int[] otherUserRatings = extractRatingsForUser(entry.getKey(), ratings);
-                double similarity = cosineSimilarity(targetUserRatings, otherUserRatings);
-                if (similarity > maxSimilarity) {
-                    maxSimilarity = similarity;
-                    mostSimilarUser = entry.getKey();
-                }
-            }
-        }
+        // 3. Parcurge utilizatorii similari și evaluează recomandările
+        for (User similarUser : similarUsers) {
+            List<Rating> similarUserRatings = ratingRepository.findByUser(similarUser);
 
-        // gives to the most similar user
-        if (mostSimilarUser != -1) {
-            for (Rating rating : userRatingsMap.get(mostSimilarUser)) {
-                if (rating.getRating() >= 4) { // Recomandă articole cu rating mare
-                    recommendedItems.add(rating.getItem().getItemId());
+            for (Rating rating : similarUserRatings) {
+                // Dacă utilizatorul țintă nu a evaluat acest item și ratingul este >= 4
+                boolean alreadyRated = targetUserRatings.stream()
+                        .anyMatch(tr -> tr.getItem().equals(rating.getItem()));
+
+                if (!alreadyRated && rating.getRating() >= 4) {
+                    recommendedItems.add(rating.getItem());
                 }
             }
         }
@@ -58,10 +56,5 @@ public class RecommenderService {
         return recommendedItems;
     }
 
-    private int[] extractRatingsForUser(int userId, List<Rating> ratings) {
-        return ratings.stream()
-                .filter(rating -> rating.getUser().getUserid() == userId)
-                .mapToInt(Rating::getRating)
-                .toArray();
-    }
+
 }
