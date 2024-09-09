@@ -30,15 +30,15 @@ public class RecommenderService {
     }
     public List<Item> recommendItems(User targetUser) {
 
-        // 1. Obține evaluările pentru utilizatorul țintă
+        // 1. Obtain ratings for the given user
         List<Rating> targetUserRatings = ratingRepository.findByUser(targetUser);
 
-        // 2. Găsește utilizatori similari
+        // 2. Find similar users
         List<User> similarUsers = ratingRepository.findSimilarUsers(targetUser);
 
         List<Item> recommendedItems = new ArrayList<>();
 
-        // 3. Parcurge utilizatorii similari și evaluează recomandările
+        // 3. Parcurge utilizatorii similari si evalueaza recomandarile
         for (User similarUser : similarUsers) {
             List<Rating> similarUserRatings = ratingRepository.findByUser(similarUser);
 

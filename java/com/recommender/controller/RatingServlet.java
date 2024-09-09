@@ -20,6 +20,7 @@ public class RatingServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Received GET request on RatingServlet");
         String pathInfo = req.getPathInfo(); // /{userId}
         if (pathInfo == null || pathInfo.length() <= 1) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID is missing");
@@ -27,9 +28,10 @@ public class RatingServlet extends HttpServlet {
         }
 
         // extract userId from URL
-        int userId = Integer.parseInt(pathInfo.substring(3));
+        int userId = Integer.parseInt(pathInfo.substring(1));
         User user = new User();
         user.setUserid(userId);  // Set userId for the chosen user
+        user.setUsername("John Doe");
 
         // get evaluations of the selected user
         List<Rating> ratings = ratingRepository.findByUser(user);

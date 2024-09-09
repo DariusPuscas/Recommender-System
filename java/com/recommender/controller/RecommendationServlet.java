@@ -21,6 +21,7 @@ public class RecommendationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Received GET request on RecommendationServlet");
         String pathInfo = req.getPathInfo(); // /{userId}
         if (pathInfo == null || pathInfo.length() <= 1) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID is missing");
@@ -28,9 +29,12 @@ public class RecommendationServlet extends HttpServlet {
         }
 
         // Extract userId from URL
-        int userId = Integer.parseInt(pathInfo.substring(3));
+        int userId = Integer.parseInt(pathInfo.substring(1));
+        System.out.println("User ID: " + userId);
         User user = new User();
-        user.setUserid(userId);  // Setăm userId-ul pentru utilizatorul cerut
+        user.setUserid(userId);  // Set id for the chosen user
+        user.setUsername("John Doe");
+
 
         // get recommendations for the given user
         List<Item> recommendations = recommenderService.recommendItems(user);
