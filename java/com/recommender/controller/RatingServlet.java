@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.recommender.model.Rating;
 import com.recommender.model.User;
 import com.recommender.repository.RatingRepository;
+import com.recommender.repository.UserRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +17,8 @@ import java.util.List;
 @WebServlet("/ratings/user/*")
 public class RatingServlet extends HttpServlet {
 
-    private RatingRepository ratingRepository = new RatingRepository();
+    final private RatingRepository ratingRepository = new RatingRepository();
+    final private  UserRepository userRepository = new UserRepository();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,10 +31,11 @@ public class RatingServlet extends HttpServlet {
 
         // extract userId from URL
         int userId = Integer.parseInt(pathInfo.substring(1));
-        User user = new User();
-        user.setUserid(userId);  // Set userId for the chosen user
-        user.setUsername("John Doe");
-
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "User not found");
+            return;
+        }
         // get evaluations of the selected user
         List<Rating> ratings = ratingRepository.findByUser(user);
 

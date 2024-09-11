@@ -9,7 +9,7 @@ import java.util.*;
 
 public class RecommenderService {
 
-    private RatingRepository ratingRepository;
+    final private RatingRepository ratingRepository;
     public RecommenderService(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
     }
@@ -38,12 +38,12 @@ public class RecommenderService {
 
         List<Item> recommendedItems = new ArrayList<>();
 
-        // 3. Parcurge utilizatorii similari si evalueaza recomandarile
+        // 3. Iterate similar user and evaluate recommendations
         for (User similarUser : similarUsers) {
             List<Rating> similarUserRatings = ratingRepository.findByUser(similarUser);
 
             for (Rating rating : similarUserRatings) {
-                // Dacă utilizatorul țintă nu a evaluat acest item și ratingul este >= 4
+                // target user hasn't evaluated this and  rating is >= 4
                 boolean alreadyRated = targetUserRatings.stream()
                         .anyMatch(tr -> tr.getItem().equals(rating.getItem()));
 

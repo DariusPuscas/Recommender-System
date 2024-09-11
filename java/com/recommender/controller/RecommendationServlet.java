@@ -5,6 +5,7 @@ import com.recommender.model.Item;
 import com.recommender.model.User;
 import com.recommender.service.RecommenderService;
 import com.recommender.repository.RatingRepository;
+import com.recommender.repository.UserRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,8 +18,8 @@ import java.util.List;
 @WebServlet("/recommendations/*")
 public class RecommendationServlet extends HttpServlet {
 
-    private RecommenderService recommenderService = new RecommenderService(new RatingRepository());
-
+    final private RecommenderService recommenderService = new RecommenderService(new RatingRepository());
+    final private UserRepository userRepository = new UserRepository();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("Received GET request on RecommendationServlet");
@@ -31,10 +32,12 @@ public class RecommendationServlet extends HttpServlet {
         // Extract userId from URL
         int userId = Integer.parseInt(pathInfo.substring(1));
         System.out.println("User ID: " + userId);
-        User user = new User();
-        user.setUserid(userId);  // Set id for the chosen user
-        user.setUsername("John Doe");
-
+        // Fetch the actual User object from the database
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "User not found");
+            return;
+        }
 
         // get recommendations for the given user
         List<Item> recommendations = recommenderService.recommendItems(user);

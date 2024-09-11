@@ -21,16 +21,16 @@ public class Main {
         tomcat.setBaseDir(".");
         System.out.println("Tomcat base directory set");
 
-        // Adaugam un context pentru aplicația web
+        // context
         Context ctx = tomcat.addContext("", new File(".").getAbsolutePath());
         System.out.println("Context added to Tomcat");
 
-        // Adaugam servlet-ul pentru evaluari (ratings)
+        // servlet-ul pentru evaluari (ratings)
         Tomcat.addServlet(ctx, "ratingServlet", new RatingServlet());
         ctx.addServletMappingDecoded("/ratings/user/*", "ratingServlet");
         System.out.println("RatingServlet added");
 
-        // Adaugam servlet-ul pentru recomandari
+        //  servlet-ul pentru recomandari
         Tomcat.addServlet(ctx, "recommendationServlet", new RecommendationServlet());
         ctx.addServletMappingDecoded("/recommendations/*", "recommendationServlet");
         System.out.println("RecommendationServlet added");
@@ -44,7 +44,7 @@ public class Main {
 
         tomcat.getConnector().setAttribute("address", "0.0.0.0");
 
-        // Pornim serverul Tomcat
+        // start Tomcat server
         tomcat.start();
         System.out.println("Tomcat started");
 

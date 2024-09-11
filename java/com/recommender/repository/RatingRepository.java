@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RatingRepository {
 
-    private SessionFactory factory;
+    final private SessionFactory factory;
 
     public RatingRepository() {
         factory = new Configuration().configure().buildSessionFactory();
