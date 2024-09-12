@@ -17,6 +17,7 @@ const RecommendedItems = () => {
       try {
         const userId = 3;  // to do
         const response = await fetch(`/api/recommendations/${userId}`);  // Endpoint
+        // headers: { Authorization: `Bearer ${token}` }
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
@@ -77,7 +78,7 @@ const RecommendedItems = () => {
         variant="outlined"
         fullWidth
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}  //update searchterm
+        onChange={(e) => setSearchTerm(e.target.value)}  // update searchterm
         margin="normal"
       />
 

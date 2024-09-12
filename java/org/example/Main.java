@@ -12,12 +12,12 @@ import java.io.File;
 public class Main {
 
     public static void main(String[] args) throws LifecycleException {
-        // Inițializare Tomcat
+        // Initialize Tomcat
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(8081);
         System.out.println("Tomcat initialized");
 
-        // Configurarea directorului de lucru pentru Tomcat
+        // set dir for Tomcat
         tomcat.setBaseDir(".");
         System.out.println("Tomcat base directory set");
 
@@ -25,15 +25,19 @@ public class Main {
         Context ctx = tomcat.addContext("", new File(".").getAbsolutePath());
         System.out.println("Context added to Tomcat");
 
-        // servlet-ul pentru evaluari (ratings)
+        //  (ratings)
         Tomcat.addServlet(ctx, "ratingServlet", new RatingServlet());
         ctx.addServletMappingDecoded("/ratings/user/*", "ratingServlet");
         System.out.println("RatingServlet added");
 
-        //  servlet-ul pentru recomandari
+        //  recommendations
         Tomcat.addServlet(ctx, "recommendationServlet", new RecommendationServlet());
         ctx.addServletMappingDecoded("/recommendations/*", "recommendationServlet");
         System.out.println("RecommendationServlet added");
+
+        Tomcat.addServlet(ctx,"loginServlet", new LoginServlet());
+        ctx.addServletMappingDecoded("/login/*", "loginServlet");
+        System.out.println("LoginServlet added");
 
         Tomcat.addServlet(ctx, "testServlet", new TestServlet());
         ctx.addServletMappingDecoded("/test/*", "testServlet");
