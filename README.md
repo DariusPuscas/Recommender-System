@@ -23,6 +23,7 @@ React (Hooks, Functional Components)
 
 Material-UI (for design)
 
+
 Backend:
 
 Java Servlets
@@ -53,7 +54,14 @@ Node.js
 npm
 
 # 🎨 Frontend Features
-Homepage
+
+1)Login page
+
+The login page is the initial screen where users are prompted to enter their email to receive personalized item recommendations.
+![Screenshot 2024-09-12 182820](https://github.com/user-attachments/assets/c49b4d74-e273-4509-9a27-bc10185bf2a0)
+
+2)Homepage
+
 The homepage displays recommended items to the logged-in user, with 
 pagination functionality and search capabilities. 
 ![image](https://github.com/user-attachments/assets/d2dc7d2a-29ce-4a6e-ae01-18f87942cebb)
@@ -67,6 +75,13 @@ The backend communicates using RESTful APIs. Below is an example of a JSON respo
 
 | ![image](https://github.com/user-attachments/assets/8466bfb8-2069-4433-9c5a-05628217388f) | ![image](https://github.com/user-attachments/assets/da3c6e4c-e95b-4575-b36f-eccda3785bc5) |
 |:------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------:|
+
+Database Integration:
+
+The backend is connected to a SQL database using Hibernate ORM.
+
+Data is fetched from the database based on user preferences, and item ratings are displayed.
+![image](https://github.com/user-attachments/assets/232198ce-7d95-4259-827f-779b54b90003)
 
 # 🎨 Project Improvements
 Potential future improvements include:
