@@ -91,3 +91,6 @@ User Registration: Add the ability for new users to register.
 Admin Role: Implement a role-based system, with separate functionality for administrators.
 
 UI/UX Improvements: Enhance the frontend to make it more visually appealing and user-friendly.
+
+# 👤 Author
+Darius Puscas - https://github.com/DariusPuscas
